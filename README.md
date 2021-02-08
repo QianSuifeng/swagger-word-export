@@ -13,3 +13,8 @@
 
 #### 版本：SwaggerToWord 1.0 (2021-02-08)
 1. 代码梳理和页面美化。
+
+
+注意：
+1. 该代码是在[JMCuixy](https://github.com/JMCuixy/swagger2word)的代码基础上进行的自定义扩展,
+有需要的小伙伴,也可直接下载原作者的源码进行调整
