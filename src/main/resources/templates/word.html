@@ -117,13 +117,6 @@
                 <!--                    <td colspan="4" th:text="${table.responseForm}"></td>-->
                 <!--                </tr>-->
 
-<!--                <tr class="bg">-->
-<!--                    <td>参数名</td>-->
-<!--                    <td width="15%">数据类型</td>-->
-<!--                    <td width="15%">参数类型</td>-->
-<!--                    <td width="15%">是否必填</td>-->
-<!--                    <td width="29%">说明</td>-->
-<!--                </tr>-->
 
                 <tr class="bg">
                     <td >参数名</td>
@@ -133,29 +126,27 @@
                 </tr>
 
                 <th:block th:each="request, c:${table.requestList}">
-                    <tr>
-                        <td align="left" th:text="${c.count} + '.' + ${request.name}"></td>
+                    <tr th:if="${request.modelAttr == null}">
+                        <td align="left" th:text="${c.count} + '.' +${request.name}"></td>
                         <td th:text="${request.type}"></td>
-                        <!-- <td th:text="${request.paramType}"></td>-->
-                        <td th:if="${request.require}" th:text="Y"></td>
-                        <td th:if="${!request.require}" th:text="N"></td>
+                        <td th:text="${request.require} ? 'Y' : 'N' "></td>
                         <td colspan="2" th:text="${request.remark}"></td>
-                        <!--                        <td th:if="${request.modelAttr}" th:text="asdfagadfg"></td>-->
                     </tr>
+
                     <th:block th:if="${request.modelAttr}">
-                        <tbody th:include="this::requestForEach(${request.modelAttr.properties},${c.count} + '.', 1)"/>
+                        <tbody th:include="this::requestForEach(${request.modelAttr.properties}, 1)"/>
                     </th:block>
                 </th:block>
 
 
                 <tr class="bg">
                     <td>返回属性名</td>
-                    <td colspan="2">类型</td>
-                    <td colspan="2">说明</td>
+                    <td colspan="1">类型</td>
+                    <td colspan="3">说明</td>
                 </tr>
 
-                <!--               对返回参数 递归生成行-->
-                <tbody th:include="this::response(${table.modelAttr.properties},'', 1)"/>
+                <!-- 对返回参数 递归生成行-->
+                <tbody th:include="this::responseForEach(${table.modelAttr.properties},1)"/>
 
                 <tr class="bg">
                     <td colspan="5">示例</td>
@@ -174,33 +165,79 @@
     </div>
 </div>
 
-<th:block th:fragment="requestForEach(properties,count, lv)">
-    <th:block th:each="p,c : ${properties}">
-        <tr>
-            <td align="left" th:text="${count} + '' + ${c.count} + '.' + ${p.name}"
-                th:style="|padding-left:${10*lv}px|"></td>
-            <td th:text="${p.type}"></td>
-<!--            <td></td>-->
-            <td th:if="${p.require}" th:text="Y"></td>
-            <td th:if="${!p.require}" th:text="N"></td>
-            <td colspan="2" th:text="${p.description}"></td>
+<th:block th:fragment="requestForEach(properties, lv)">
+
+    <!-- 判断是否是第一次 -->
+    <span th:if="${lv} == 1">
+        <th:block th:each="p,c : ${properties}">
+            <tr>
+                <td align="left" th:rowspan="${#lists.isEmpty(p.properties)}  ? 1 : ${#lists.size(p.properties) + 2}" th:text="${c.count} + '.' + ${p.name}" th:style="|padding-left:${10*lv}px|"></td>
+                <td th:text="${p.type}"></td>
+                <td th:if="${p.require}" th:text="Y"></td>
+                <td th:if="${!p.require}" th:text="N"></td>
+                <td colspan="2" th:text="${p.description}"></td>
+            </tr>
+            <th:block th:unless="${#lists.isEmpty(p.properties)}"
+                      th:include="this::requestForEach(${p.properties}, ${lv+1})"/>
+        </th:block>
+    </span>
+
+    <span th:if="${lv} != 1">
+        <tr class="bg">
+            <td>参数名</td>
+            <td>数据类型</td>
+            <td>是否必填</td>
+            <td>说明</td>
         </tr>
-        <th:block th:unless="${#lists.isEmpty(p.properties)}"
-                  th:include="this::requestForEach(${p.properties},${count} + '' + ${c.count} + '.',${lv+1})"/>
-    </th:block>
+
+        <th:block th:each="p,c : ${properties}">
+            <tr>
+                <td align="left" th:text="${c.count} + '.' + ${p.name}" th:style="|padding-left:${10*lv}px|"></td>
+                <td th:text="${p.type}"></td>
+                <td th:if="${p.require}" th:text="Y"></td>
+                <td th:if="${!p.require}" th:text="N"></td>
+                <td th:text="${p.description}"></td>
+            </tr>
+            <th:block th:unless="${#lists.isEmpty(p.properties)}"
+                      th:include="this::requestForEach(${p.properties}, ${lv+1})"/>
+        </th:block>
+    </span>
+
 </th:block>
 
-<th:block th:fragment="response(properties,count, lv)">
-    <th:block th:each="p,c : ${properties}">
-        <tr>
-            <td align="left" th:text="${count} + '' + ${c.count} + '.' + ${p.name}"
-                th:style="|padding-left:${10*lv}px|"></td>
-            <td colspan="2" th:text="${p.type}"></td>
-            <td colspan="2" th:text="${p.description}"></td>
+<th:block th:fragment="responseForEach(properties, lv)">
+    <!-- 判断是否是第一次 -->
+    <span th:if="${lv} == 1">
+        <th:block th:each="p,c : ${properties}">
+            <tr>
+                <td align="left" th:rowspan="${#lists.isEmpty(p.properties)}  ? 1 : ${#lists.size(p.properties) + 2}" th:text="${c.count} + '.' + ${p.name}" th:style="|padding-left:${10*lv}px|"></td>
+                <td colspan="1" th:text="${p.type}"></td>
+                <td colspan="3" th:text="${p.description}"></td>
+            </tr>
+            <th:block th:unless="${#lists.isEmpty(p.properties)}"
+                      th:include="this::responseForEach(${p.properties}, ${lv+1})"/>
+        </th:block>
+    </span>
+
+    <span th:if="${lv} != 1">
+        <tr class="bg">
+            <td>返回子属性名</td>
+            <td colspan="1">类型</td>
+            <td colspan="2">说明</td>
         </tr>
-        <th:block th:unless="${#lists.isEmpty(p.properties)}"
-                  th:include="this::response(${p.properties},${count} + '' + ${c.count} + '.',${lv+1})"/>
-    </th:block>
+
+        <th:block th:each="p,c : ${properties}">
+            <tr>
+                <td align="left" th:text="${c.count} + '.' + ${p.name}" th:style="|padding-left:${10*lv}px|"></td>
+                <td colspan="1" th:text="${p.type}"></td>
+                <td colspan="2" th:text="${p.description}"></td>
+            </tr>
+            <th:block th:unless="${#lists.isEmpty(p.properties)}"
+                      th:include="this::responseForEach(${p.properties}, ${lv+1})"/>
+        </th:block>
+    </span>
+
+
 </th:block>
 </body>
 </html>
