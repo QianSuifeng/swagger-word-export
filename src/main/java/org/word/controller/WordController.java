@@ -115,6 +115,7 @@ public class WordController {
     }
 
     /**
+     * TODO 这个好像有点问题,先屏蔽掉
      * 将 swagger json字符串转换成 word文档并下载
      *
      * @param model
@@ -122,6 +123,7 @@ public class WordController {
      * @param response
      * @return
      */
+    @ApiIgnore
     @ApiOperation(value = "将 swagger json字符串转换成 word文档并下载", notes = "", tags = {"Word"})
     @ApiResponses(value = {@ApiResponse(code = 200, message = "请求成功。")})
     @RequestMapping(value = "/strToWord", method = {RequestMethod.POST})

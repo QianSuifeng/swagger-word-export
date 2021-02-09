@@ -23,12 +23,12 @@ public class SwaggerDocumentationConfig {
     ApiInfo apiInfo() {
         return new ApiInfoBuilder()
             .title("Swagger to Word")
-            .description("a tool for converting swagger json to word")
-            .license("Apache 2.0")
-            .licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")
+            .description("几个将Swagger-UI转换为离线Word的方法")
+//            .license("Apache 2.0")
+//            .licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")
             .termsOfServiceUrl("")
-            .version("0.0.1")
-            .contact(new Contact("","", "15980292662@163.com"))
+            .version("1.0.1")
+            .contact(new Contact("","", ""))
             .build();
     }
 

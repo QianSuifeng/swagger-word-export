@@ -82,7 +82,7 @@ public class WordServiceImpl implements WordService {
         Map<String, Object> map = JsonUtils.readValue(jsonStr, HashMap.class);
 
         //解析model
-        Map<String, ModelAttr> deItInMap = parseDefinitions(map);
+        Map<String, ModelAttr> definitionMap = parseDefinitions(map);
 
         //解析paths
         Map<String, Map<String, Object>> paths = (Map<String, Map<String, Object>>) map.get("paths");
@@ -117,12 +117,12 @@ public class WordServiceImpl implements WordService {
                         requestForm = StringUtils.join(consumes, ",");
                     }
 
-                    // 8.返回参数格式，类似于 application/json
-                    String responseForm = "";
-                    List<String> produces = (List) content.get("produces");
-                    if (produces != null && produces.size() > 0) {
-                        responseForm = StringUtils.join(produces, ",");
-                    }
+//                    // 8.返回参数格式，类似于 application/json
+//                    String responseForm = "";
+//                    List<String> produces = (List) content.get("produces");
+//                    if (produces != null && produces.size() > 0) {
+//                        responseForm = StringUtils.join(produces, ",");
+//                    }
 
                     // 9. 请求体
                     List<LinkedHashMap> parameters = (ArrayList) content.get("parameters");
@@ -138,20 +138,20 @@ public class WordServiceImpl implements WordService {
                     table.setTag(tag);
                     table.setDescription(description);
                     table.setRequestForm(requestForm);
-                    table.setResponseForm(responseForm);
+//                    table.setResponseForm(responseForm);
                     table.setRequestType(requestType);
-                    table.setRequestList(processRequestList(parameters, deItInMap));
+                    table.setRequestList(processRequestList(parameters, definitionMap));
                     table.setResponseList(processResponseCodeList(responses));
 
                     // 取出来状态是200时的返回值
                     Map<String, Object> obj = (Map<String, Object>) responses.get("200");
                     if (obj != null && obj.get("schema") != null) {
-                        table.setModelAttr(processResponseModelAttrs(obj, deItInMap));
+                        table.setModelAttr(processResponseModelAttrs(obj, definitionMap));
                     }
 
                     //示例
                     table.setRequestParam(processRequestParam(table.getRequestList()));
-                    table.setResponseParam(processResponseParam(obj, deItInMap));
+                    table.setResponseParam(processResponseParam(obj, definitionMap));
 
                     result.add(table);
                 }
@@ -280,10 +280,10 @@ public class WordServiceImpl implements WordService {
      * 处理请求参数列表
      *
      * @param parameters
-     * @param definitinMap
+     * @param definitionMap
      * @return
      */
-    private List<Request> processRequestList(List<LinkedHashMap> parameters, Map<String, ModelAttr> definitinMap) {
+    private List<Request> processRequestList(List<LinkedHashMap> parameters, Map<String, ModelAttr> definitionMap) {
         List<Request> requestList = new ArrayList<>();
         if (!CollectionUtils.isEmpty(parameters)) {
             for (Map<String, Object> param : parameters) {
@@ -306,7 +306,7 @@ public class WordServiceImpl implements WordService {
                     }
                     if (ref != null) {
                         request.setType(request.getType() + ":" + ref.toString().replaceAll("#/definitions/", ""));
-                        request.setModelAttr(definitinMap.get(ref));
+                        request.setModelAttr(definitionMap.get(ref));
                     }
                 }
                 // 是否必填
@@ -390,15 +390,13 @@ public class WordServiceImpl implements WordService {
      */
     private Map<String, ModelAttr> parseDefinitions(Map<String, Object> map) {
         Map<String, Map<String, Object>> definitions = (Map<String, Map<String, Object>>) map.get("definitions");
-        Map<String, ModelAttr> definitinMap = new HashMap<>(256);
+        Map<String, ModelAttr> definitionMap = new HashMap<>(256);
         if (definitions != null) {
-            Iterator<String> modelNameIt = definitions.keySet().iterator();
-            while (modelNameIt.hasNext()) {
-                String modeName = modelNameIt.next();
-                getAndPutModelAttr(definitions, definitinMap, modeName);
+            for (String modeName : definitions.keySet()) {
+                getAndPutModelAttr(definitions, definitionMap, modeName);
             }
         }
-        return definitinMap;
+        return definitionMap;
     }
 
     /**
