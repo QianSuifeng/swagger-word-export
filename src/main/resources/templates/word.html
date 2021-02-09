@@ -133,7 +133,7 @@
                         <td colspan="2" th:text="${request.remark}"></td>
                     </tr>
 
-                    <th:block th:if="${request.modelAttr}">
+                    <th:block th:if="${request.modelAttr} and !${#lists.isEmpty(request.modelAttr.properties)}">
                         <tbody th:include="this::requestForEach(${request.modelAttr.properties}, 1)"/>
                     </th:block>
                 </th:block>
@@ -166,7 +166,6 @@
 </div>
 
 <th:block th:fragment="requestForEach(properties, lv)">
-
     <!-- 判断是否是第一次 -->
     <span th:if="${lv} == 1">
         <th:block th:each="p,c : ${properties}">
@@ -182,7 +181,7 @@
         </th:block>
     </span>
 
-    <span th:if="${lv} != 1">
+    <span th:if="${lv} != 1 and !${#lists.isEmpty(properties)}">
         <tr class="bg">
             <td>参数名</td>
             <td>数据类型</td>
@@ -202,8 +201,8 @@
                       th:include="this::requestForEach(${p.properties}, ${lv+1})"/>
         </th:block>
     </span>
-
 </th:block>
+
 
 <th:block th:fragment="responseForEach(properties, lv)">
     <!-- 判断是否是第一次 -->
@@ -219,7 +218,7 @@
         </th:block>
     </span>
 
-    <span th:if="${lv} != 1">
+    <span th:if="${lv} != 1 and !${#lists.isEmpty(properties)}">
         <tr class="bg">
             <td>返回子属性名</td>
             <td colspan="1">类型</td>
