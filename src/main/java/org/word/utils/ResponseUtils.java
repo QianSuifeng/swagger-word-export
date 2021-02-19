@@ -8,10 +8,6 @@ import java.util.Set;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-/**
- * @author : ivenhan
- * @date : 2020/10/16
- */
 public class ResponseUtils {
 
     public static void validateResponseKey(Map<String, Map> content) throws JsonProcessingException {

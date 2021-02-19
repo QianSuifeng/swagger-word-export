@@ -1,9 +1,6 @@
 package org.word.utils;
 
-/**
- * @author : cuixiuyin
- * @date : 2019/8/31
- */
+
 public class MenuUtils {
 
     public static Integer count = 0;

@@ -20,10 +20,6 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-/**
- * @Author XiuYin.Cui
- * @Date 2018/1/12
- **/
 @SuppressWarnings({"unchecked", "rawtypes"})
 @Slf4j
 @Service

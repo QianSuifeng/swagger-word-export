@@ -9,10 +9,6 @@ import java.util.Map.Entry;
 import org.apache.commons.lang3.StringUtils;
 import org.word.model.ModelAttr;
 
-/**
- * @author ivenhan
- * @Date: 2020/10/15
- */
 
 public class ModelAttrUtils {
 

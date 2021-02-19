@@ -29,10 +29,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
-/**
- * @Author XiuYin.Cui
- * @Date 2018/1/12
- **/
 @SuppressWarnings({"unchecked", "rawtypes"})
 @Slf4j
 @Service
