@@ -4,7 +4,14 @@
 ![Image text](https://github.com/qiany-sui/swagger-word-export/blob/master/src/main/resources/static/swagger-ui-1.jpg)
 3. 生成的 WORD 示例：  
 ![Image text](https://github.com/qiany-sui/swagger-word-export/blob/master/src/main/resources/static/word-demo-1.jpg)
+   
+<br>
 
+注:还有一种方式可以提前预览需要导出的Word文件的样式
+1. 修改application.yml中的swagger.url值,将其改成需要预览的那个word所对应的swagger-ui的api-docs地址
+2. 访问地址: http://127.0.0.1:8081/word
+   
+<br>
 <br>
 <br>
 <br>
@@ -13,6 +20,9 @@
 
 #### 版本：SwaggerToWord 1.0 (2021-02-08)
 1. 代码梳理和页面美化。
+
+#### 版本：SwaggerToWord 1.1 (2021-02-19)
+1. 增加body型数据require的解析,另其能够正确显示出被@RequestBody所标识对象内部的require
 
 
 注意：

@@ -15,6 +15,7 @@ import org.word.model.Table;
 import org.word.service.WordService;
 import org.word.utils.JsonUtils;
 
+import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.*;
 import java.util.Map.Entry;
@@ -25,7 +26,7 @@ import java.util.stream.Collectors;
 @Service
 public class WordServiceImpl implements WordService {
 
-    @Autowired
+    @Resource
     private RestTemplate restTemplate;
 
     @Override
@@ -111,6 +112,8 @@ public class WordServiceImpl implements WordService {
                     List<String> consumes = (List) content.get("consumes");
                     if (consumes != null && consumes.size() > 0) {
                         requestForm = StringUtils.join(consumes, ",");
+                    } else {
+                        requestForm = "application/x-www-form-urlencoded";
                     }
 
 //                    // 8.返回参数格式，类似于 application/json
@@ -413,6 +416,12 @@ public class WordServiceImpl implements WordService {
         }
         Iterator<Entry<String, Object>> mIt = modeProperties.entrySet().iterator();
 
+
+        ArrayList requireList = null;
+        if(swaggerMap.get(modeName).get("required") != null) {
+            requireList = (ArrayList) swaggerMap.get(modeName).get("required");
+        }
+
         List<ModelAttr> attrList = new ArrayList<>();
         //解析属性
         while (mIt.hasNext()) {
@@ -425,6 +434,10 @@ public class WordServiceImpl implements WordService {
                 child.setType(child.getType() + "(" + attrInfoMap.get("format") + ")");
             }
             child.setType(StringUtils.defaultIfBlank(child.getType(), "object"));
+
+            if(requireList != null) {
+                child.setRequire(requireList.contains(mEntry.getKey()));
+            }
 
             Object ref = attrInfoMap.get("$ref");
             Object items = attrInfoMap.get("items");
@@ -442,6 +455,7 @@ public class WordServiceImpl implements WordService {
             child.setDescription((String) attrInfoMap.get("description"));
             attrList.add(child);
         }
+
         Object title = swaggerMap.get(modeName).get("title");
         Object description = swaggerMap.get(modeName).get("description");
         modeAttr.setClassName(title == null ? "" : title.toString());
