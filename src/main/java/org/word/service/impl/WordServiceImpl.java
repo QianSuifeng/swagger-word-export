@@ -35,7 +35,7 @@ public class WordServiceImpl implements WordService {
         try {
             String jsonStr = restTemplate.getForObject(swaggerUrl, String.class);
             resultMap = tableListFromString(jsonStr);
-            log.debug(JsonUtils.writeJsonStr(resultMap));
+//            log.debug(JsonUtils.writeJsonStr(resultMap));
         } catch (Exception e) {
             log.error("parse error", e);
         }
@@ -52,7 +52,7 @@ public class WordServiceImpl implements WordService {
             resultMap.put("tableMap", new TreeMap<>(tableMap));
             resultMap.put("info", map.get("info"));
 
-            log.debug(JsonUtils.writeJsonStr(resultMap));
+//            log.debug(JsonUtils.writeJsonStr(resultMap));
         } catch (Exception e) {
             log.error("parse error", e);
         }

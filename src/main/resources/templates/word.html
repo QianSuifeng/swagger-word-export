@@ -172,8 +172,10 @@
             <tr>
                 <td align="left" th:rowspan="${#lists.isEmpty(p.properties)}  ? 1 : ${#lists.size(p.properties) + 2}" th:text="${c.count} + '.' + ${p.name}" th:style="|padding-left:${10*lv}px|"></td>
                 <td th:text="${p.type}"></td>
-                <td th:if="${p.require}" th:text="Y"></td>
-                <td th:if="${!p.require}" th:text="N"></td>
+<!--                <td th:if="${p.require}" th:text="Y"></td>-->
+<!--                <td th:if="${!p.require}" th:text="N"></td>-->
+                <td th:if="${p.require}" th:text="true"></td>
+                <td th:if="${!p.require}" th:text="false"></td>
                 <td colspan="2" th:text="${p.description}"></td>
             </tr>
             <th:block th:unless="${#lists.isEmpty(p.properties)}"
